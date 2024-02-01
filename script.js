@@ -12,19 +12,23 @@ const initialPosition = {x: 270, y: 240};
 
 let snake = [initialPosition];
 
+// Aumenta pontuação
 const incrementScore = () => {
   score.innerText = parseInt(score.innerText) + 1;
 }
 
+// Gera valor aleatório
 const randomNumber = (min,max) => {
   return Math.round(Math.random() * (max - min) + min);
 }
 
+// Gera posição aleatória
 const randomPosition = () => {
   const number = randomNumber(0,canvas.width-size);
   return Math.round(number/30) * 30;
 }
 
+// Gera cor aleatória
 const randomColor = () => {
   const red = randomNumber(0,250);
   const blue = randomNumber(0,250);
@@ -33,6 +37,7 @@ const randomColor = () => {
   return `rgb(${red},${green},${blue})`;
 }
 
+// Objeto da comida
 const food = {
   x: randomPosition(),
   y: randomPosition(),
@@ -41,6 +46,7 @@ const food = {
 
 let direction, loopId
 
+// Desenha comida
 const drawFood = () => {
 
   const {x,y,color} = food;
@@ -52,6 +58,7 @@ const drawFood = () => {
   ctx.shadowBlur = 0;
 }
 
+// Desenhar cobra
 const drawSnake = () => {
   ctx.fillStyle = '#ddd';
   
@@ -65,6 +72,7 @@ const drawSnake = () => {
   });
 }
 
+// Move cobra
 const moveSnake = () => {
   if(!direction) return
   
@@ -72,6 +80,7 @@ const moveSnake = () => {
 
   snake.shift();
 
+  // Verifica direções
   if(direction == "right"){
     snake.push({x:head.x + size,y:head.y});
   }else if(direction == "left"){
@@ -86,6 +95,7 @@ const moveSnake = () => {
   
 }
 
+// Desenha grid
 const drawGrid = () => {
   ctx.lineWidth = 1;
   ctx.strokeStyle = '#191919';
@@ -103,6 +113,7 @@ const drawGrid = () => {
   }
 }
 
+// Checa se deve comer a comida
 const checkEat = () => {
   const head = snake[snake.length - 1];
 
@@ -124,6 +135,7 @@ const checkEat = () => {
   }
 }
 
+// Checa a colisão com as paredes
 const checkCollision = () => {
   const head = snake[snake.length - 1];
   const canvasLimit = canvas.width - size;
@@ -139,6 +151,7 @@ const checkCollision = () => {
   }
 }
 
+// Game Over - acabou jogo
 const gameOver = () => {
   direction = undefined;
   menu.style.display = "flex";
@@ -146,6 +159,7 @@ const gameOver = () => {
   canvas.style.filter = "blur(2px)";
 }
 
+// Loop do jogo
 const gameLoop = () => {
   clearInterval(loopId)
   
@@ -163,6 +177,8 @@ const gameLoop = () => {
 }
 
 gameLoop()
+
+// Teclas de movimentação
 document.addEventListener("keydown", ({key}) => {
   if(key == "ArrowRight" && direction != 'left'){
     direction = "right"
@@ -181,7 +197,7 @@ document.addEventListener("keydown", ({key}) => {
   }
 })
 
-
+// Clique para começar a jogar
 buttonPlay.addEventListener("click",() => {
   score.innerText = "00";
   menu.style.display = "none";
